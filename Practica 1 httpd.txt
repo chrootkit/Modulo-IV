@@ -1,0 +1,31 @@
+Practica 1 httpd
+
+
+sudo dnf update -y  
+sudo dnf install httpd -y  
+sudo mkdir -p /var/www/hola_mundo  
+echo "<h1>Hola Mundo</h1>" | sudo tee /var/www/hola_mundo/index.html  
+sudo tee /etc/httpd/conf.d/hola_mundo.conf <<EOF
+<VirtualHost *:80>
+    DocumentRoot /var/www/hola_mundo
+    <Directory /var/www/hola_mundo>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+EOF
+sudo systemctl restart httpd  
+sudo mkdir -p /var/www/mi_sitio  
+echo "<h1>Raelina Ferrera</h1><p>Matrícula: XXXXXXX</p><p>Materia: Nombre de la Materia</p>" | sudo tee /var/www/mi_sitio/index.html  
+sudo tee /etc/httpd/conf.d/mi_sitio.conf <<EOF
+<VirtualHost *:8080>
+    DocumentRoot /var/www/mi_sitio
+    <Directory /var/www/mi_sitio>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+EOF
+echo "Listen 8080" | sudo tee -a /etc/httpd/conf/httpd.conf  
+sudo systemctl restart httpd  
+sudo systemctl enable httpd  

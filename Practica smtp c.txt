@@ -1,0 +1,25 @@
+sudo dnf install postfix
+systemctl status postfix
+cd /etc/postfix
+ls
+sudo nano main.cf
+
+relayhost = [smtp.gmail.com]:587
+
+smtp_use_tls = yes
+smtp_tls_security_level = encrypt
+smtp_tls_note_starttls_offer = yes
+smtp_tls_CAfile = /etc/ssl/certs/ca-bundle.crt
+
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+smtp_sasl_tls_security_options = noanonymous
+
+
+sudo nano /etc/postfix/sasl_passwd
+[smtp.gmail.com]:587 username:password
+ls -l
+sudo chmod 600 /etc/postfix/sasl_passwd
+sudo postmap /etc/postfix/sasl_passwd
+sudo systemctl reload postfix
